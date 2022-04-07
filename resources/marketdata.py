@@ -1,9 +1,10 @@
 from models.marketdata import MarketData, marketdata_schema, marketdatas_schema
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, Flask
 from sqlalchemy.exc import IntegrityError
-from db import db
 from security import token_required
+from db import db
 
+app = Flask(__name__)
 marketdata = Blueprint('marketdata', __name__)
 
 # Create an MarketData

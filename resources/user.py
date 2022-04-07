@@ -1,17 +1,17 @@
 from flask import request, jsonify, Blueprint, Flask
+from db import db
 from models.user import User, user_schema, users_schema
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import IntegrityError
 import uuid
-from db import db
 from security import token_required
 
 app = Flask(__name__)
-user = Blueprint('user', __name__)
+user_bp = Blueprint('user_bp', __name__)
 
 
 # All user information
-@user.route('/user', methods=['GET'])
+@user_bp.route('/user', methods=['GET'])
 @token_required
 def get_all_users(current_user):
     users = User.query.all()
@@ -19,7 +19,7 @@ def get_all_users(current_user):
     return jsonify({'Users': output})
 
 
-@user.route('/user/<public_id>', methods=['GET'])
+@user_bp.route('/user/<public_id>', methods=['GET'])
 @token_required
 def get_one_user(current_user, public_id):
     user = User.query.filter_by(public_id=public_id).first()
@@ -29,7 +29,7 @@ def get_one_user(current_user, public_id):
     return user_schema.jsonify(user)
 
 
-@user.route('/user', methods=['POST'])
+@user_bp.route('/user', methods=['POST'])
 def create_user():
     data = request.get_json()
 
@@ -44,7 +44,7 @@ def create_user():
     return jsonify({'message': 'New user created!'})
 
 
-@user.route('/user/<public_id>', methods=['PUT'])
+@user_bp.route('/user/<public_id>', methods=['PUT'])
 @token_required
 def promote_user(current_user, public_id):
     if not current_user.admin:
@@ -61,7 +61,7 @@ def promote_user(current_user, public_id):
     return jsonify({'message': 'The user has been promoted!'})
 
 
-@user.route('/user/<public_id>', methods=['DELETE'])
+@user_bp.route('/user/<public_id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, public_id):
     if not current_user.admin:

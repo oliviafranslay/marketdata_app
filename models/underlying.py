@@ -7,7 +7,14 @@ class Underlying(db.Model):
     ticker = db.Column(db.String(10), unique=True)
     fullname = db.Column(db.String(100), unique=True)
     exchange = db.Column(db.String(50))
-    marketdata = db.relationship('MarketData', backref='underlying')
+
+    def __init__(self, ticker, fullname, exchange):
+        self.ticker = ticker
+        self.fullname = fullname
+        self.exchange = exchange
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
 
 # Underlying Schema
 class UnderlyingSchema(ma.Schema):
@@ -16,3 +23,4 @@ class UnderlyingSchema(ma.Schema):
 
 underlying_schema = UnderlyingSchema()
 underlyings_schema = UnderlyingSchema(many=True)
+
