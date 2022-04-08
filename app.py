@@ -9,9 +9,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Init db
 db = SQLAlchemy(app)
 from models import *
-from resources.user import user_bp
-from resources.underlying import underlying
-from resources.marketdata import marketdata
+from controller.user import user_bp
+from controller.underlying import underlying
+from controller.marketdata import marketdata
 from security import security
 from exception import exception
 
